@@ -4,7 +4,7 @@ import { HEROES } from './mock-heroes';
 import { MessageService } from './message.service';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +59,20 @@ export class HeroService {
       .pipe(
         tap(_ => this.log(`delete hero id=${id}`)),
         catchError(this.handleError<Hero>('deleteHero'))
+      );
+  }
+
+  /* GET heroes whose name contains search term */
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      return of([]);
+    }
+
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`)
+      .pipe(
+        tap(hs => hs.length ? this.log(`found hereoes matching "${term}"`) :
+          this.log(`no heroes matching "${term}"`)),
+        catchError(this.handleError<Hero[]>('searchHeroes', [])) 
       );
   }
 

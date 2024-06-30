@@ -8,7 +8,7 @@ import { Hero } from '../hero';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  heroes: Hero[] = [];
+  topHeroes: Hero[] = [];
 
   constructor(private heroService: HeroService) { }
   ngOnInit(): void {
@@ -17,6 +17,6 @@ export class DashboardComponent implements OnInit {
 
   private getHeroes(): void {
     this.heroService.getHeroes()
-      .subscribe(heroes => this.heroes = heroes.slice(0, 4));
+      .subscribe(heroes => this.topHeroes = heroes.slice(0, 4));
   }
 }
